@@ -1488,6 +1488,9 @@ int main(int argc, char *argv[])
         fwrite(&rate,sizeof(E_Rates),1,Efile);
       }
 
+
+      printf("begin printing all stats\n"); fflush(stdout);
+
     for (n = 1; n <= 3; n++)
       for (i = 0; i < mic_size[n]; i++)
         { if (n == 1)
@@ -1561,6 +1564,8 @@ int main(int argc, char *argv[])
               printf("end printing stats\n"); fflush(stdout);
             }
         }
+
+    printf("end printing all stats\n"); fflush(stdout);
   }
 
   free(Mic1Tab[0]+2);
