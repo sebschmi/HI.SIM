@@ -1524,21 +1524,21 @@ int main(int argc, char *argv[])
             }
 
           if (VERBOSE)
-            { printf("printing stats");
-              printf("\n%d ",n);
+            { printf("printing stats\n"); fflush(stdout);
+              printf("\n%d ",n); fflush(stdout);
               for (k = 2*(n-1); k >= 0; k -= 2)
-                printf("%c",dna[(i>>k)&0x3]);
-              printf("\n");
+                {printf("%c",dna[(i>>k)&0x3]); fflush(stdout);}
+              printf("\n"); fflush(stdout);
               for (k = 0; k < khalf-6; k++)
                 { d = mtab[k].allD;
                   if (d > 0)
-                    { printf("  D %2d:",k+2*n);
+                    { printf("  D %2d:",k+2*n); fflush(stdout);
                       for (j = 0; j < n; j++)
-                        printf(" %10lld",mtab[k].del[j]);
-                      printf(" / %10.0f = ",d);
+                        {printf(" %10lld",mtab[k].del[j]); fflush(stdout);}
+                      printf(" / %10.0f = ",d); fflush(stdout);
                       for (j = 0; j < n; j++)
-                        printf(" %.3f",(100.*mtab[k].del[j])/d);
-                      printf("\n");
+                        {printf(" %.3f",(100.*mtab[k].del[j])/d); fflush(stdout);}
+                      printf("\n"); fflush(stdout);
                     }
                 }
               fflush(stdout);
@@ -1554,7 +1554,7 @@ int main(int argc, char *argv[])
                       printf("\n"); fflush(stdout);
                     }
                 }
-              printf("end printing stats");
+              printf("end printing stats\n"); fflush(stdout);
             }
         }
   }
