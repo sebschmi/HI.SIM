@@ -1575,11 +1575,13 @@ int main(int argc, char *argv[])
   //  Code for analyzing read profiles to extract length distribution and length-dependent
   //    error rate distributions
 
+  printf("start analyzing read profiles to extract length distribution and length-dependent error rate distributions\n"); fflush(stdout);
   { Read_Parm parm[NTHREADS];
     pthread_t threads[NTHREADS];
     int64 etot, ebps;
     int   t, i, e;
 
+    printf("start allocating\n"); fflush(stdout);
     for (t = 0; t < NTHREADS; t++)
       { parm[t].len  = Malloc(sizeof(int64)*(RLIMIT/RBUCK+1),"Allocating stat tables");
         parm[t].elb  = Malloc(sizeof(int64 *)*(RLIMIT/EBUCK+1),"Allocating stat tables");
@@ -1590,10 +1592,12 @@ int main(int argc, char *argv[])
         bzero(parm[t].len,sizeof(int64)*(RLIMIT/RBUCK+1));
         bzero(parm[t].elb[0],sizeof(int64)*(ELIMIT+1)*(RLIMIT/EBUCK+1));
       }
+    printf("end allocating\n"); fflush(stdout);
 
     Elb = parm[0].elb;
     Len = parm[0].len;
 
+    printf("start cloning\n"); fflush(stdout);
     for (t = 0; t < NTHREADS; t++)
       { parm[t].beg  = (P->nreads * t) / NTHREADS;
         parm[t].end  = (P->nreads * (t+1)) / NTHREADS;
@@ -1605,6 +1609,7 @@ int main(int argc, char *argv[])
 
     KMER = P->kmer;
 
+    printf("start scanning\n"); fflush(stdout);
 #ifdef DEBUG_THREADS
     for (t = 0; t < NTHREADS; t++)
       scan_thread(parm+t);
@@ -1616,6 +1621,7 @@ int main(int argc, char *argv[])
       pthread_join(threads[t],NULL);
 #endif
 
+    printf("start collecting stats\n"); fflush(stdout);
     RMean = parm[0].rsum;
     RsDev = parm[0].rsqr;
     Nread = parm[0].ncnt;
@@ -1633,10 +1639,13 @@ int main(int argc, char *argv[])
         etot  += parm[t].terr;
         ebps  += parm[t].tbps;
       }
+
+    printf("start dividing stats\n"); fflush(stdout);
     RMean /= Nread;
     RsDev = sqrt (RsDev/Nread - RMean*RMean);
     AvErr = (10000*etot)/ebps;
 
+    printf("start freeing\n"); fflush(stdout);
     for (t = NTHREADS-1; t > 0; t--)
       Free_Profiles(parm[t].P);
 
@@ -1646,6 +1655,8 @@ int main(int argc, char *argv[])
         free(parm[t].len);
       }
   }
+
+  printf("end analyzing read profiles to extract length distribution and length-dependent error rate distributions\n"); fflush(stdout);
 
   { int    i, e;
     int    rmax, emax, itmp;
@@ -1661,6 +1672,8 @@ int main(int argc, char *argv[])
       if (Len[rmax] > 0)
         break;
 
+    printf("start writing things to Efile\n"); fflush(stdout);
+
     fwrite(&rmax,sizeof(int),1,Efile);
     itmp = RBUCK;
     fwrite(&itmp,sizeof(int),1,Efile);
@@ -1670,6 +1683,8 @@ int main(int argc, char *argv[])
     fwrite(&itmp,sizeof(int),1,Efile);
     fwrite(&AvErr,sizeof(int),1,Efile);
 
+    printf("Nread = %lld\n", Nread); fflush(stdout);
+
     sum = 0;
     for (i = 0; i <= rmax; i++)
       { sum += Len[i];
@@ -1677,6 +1692,7 @@ int main(int argc, char *argv[])
         fwrite(&cum,sizeof(double),1,Efile);
       }
 
+    printf("etot = %lld\n", etot); fflush(stdout);
     emax = ((rmax+1)*RBUCK-1)/EBUCK;
     for (i = 0; i <= emax; i++)
       { etot = 0;
