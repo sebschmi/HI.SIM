@@ -1505,7 +1505,9 @@ int main(int argc, char *argv[])
                 }
               else
                 { for (j = 0; j < n; j++)
-                    { dmic.op[j] = mtab[k].del[j]/d;
+                    {
+                      printf("1 Dividing by d = %f", d); fflush(stdout);
+                      dmic.op[j] = mtab[k].del[j]/d;
                       dmic.all  += dmic.op[j];
                     }
                 }
@@ -1516,7 +1518,9 @@ int main(int argc, char *argv[])
                 } 
               else
                 { for (j = 0; j < n; j++)
-                    { dmic.op[j+n] = mtab[k].ins[j]/d;
+                    {
+                      printf("2 Dividing by d = %f", d); fflush(stdout);
+                      dmic.op[j+n] = mtab[k].ins[j]/d;
                       dmic.all    += dmic.op[j+n];
                     }
                 }
