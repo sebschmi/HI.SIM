@@ -924,6 +924,8 @@ static void *scan_thread(void *args)
   int64   i;
   int     p;
 
+  printf("KMER = %lld", KMER); fflush(stdout);
+
   pmax    = 20000;
   profile = Malloc(pmax*sizeof(uint16),"Profile array");
 
@@ -988,6 +990,11 @@ static void *scan_thread(void *args)
 
       terr += err;
       tbps += plen-rep;
+
+      if (plen-rep == 0) {
+          printf("plen-rep == 0"); fflush(stdout);
+          exit(1);
+      }
 
       ncnt += 1;
       err   = (10000*err)/(plen-rep);
