@@ -2159,6 +2159,7 @@ static int64 Shotgun(Genome *gene, int ploid, double prate)
   double     erate;
   int64      emark;
   int        i;
+  int64      glensum;
 
   omax = RMEAN + 5*RSDEV;
   oseq = Malloc(omax+3,"Allocating read buffer");
@@ -2182,9 +2183,12 @@ static int64 Shotgun(Genome *gene, int ploid, double prate)
 
   genbp  = 0;
   nreads = 0;
+  glensum = 0;
   for (i = 0; i < gene->sfnum; i++)
     { scaf = gene->scafs[i];
       glen = gene->sflen[i];
+      printf("glen = %lld\n", glen);
+      glensum += glen;
 
       if (glen <= RMEAN+RSDEV)
         { fprintf(stderr,"%s: Scaffold length is less than mean read length + 1 std. deviation!\n",
@@ -2400,6 +2404,8 @@ static int64 Shotgun(Genome *gene, int ploid, double prate)
       else
         genbp += COVERAGE*(glen+RMEAN) - totbp;
     }
+
+  printf("glensum = %lld\n", glensum);
 
   if (ERRINFO)
     { fseek(ERR_OUT,emark+2,SEEK_SET);

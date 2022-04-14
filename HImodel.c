@@ -924,7 +924,7 @@ static void *scan_thread(void *args)
   int64   i;
   int     p;
 
-  printf("KMER = %lld", KMER); fflush(stdout);
+  printf("KMER = %d", KMER); fflush(stdout);
 
   pmax    = 20000;
   profile = Malloc(pmax*sizeof(uint16),"Profile array");
