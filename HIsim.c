@@ -2201,11 +2201,13 @@ static int64 Shotgun(Genome *gene, int ploid, double prate) {
         while (totbp > 0) {
             int64 len, rbeg, rend, del;
 
-            nbeg += sample_exponential((RMEAN * (glen - nbeg)) / totbp);
+            int increment = sample_exponential(((double) RMEAN * (glen - nbeg)) / (double) totbp);
+            printf("increment = %d\n", increment);
+            nbeg += increment;
 
-            do
+            do {
                 len = sample_read_length(&erate);
-            while (len < RSHORT);
+            } while (len < RSHORT);
 
             rbeg = nbeg;
             rend = nbeg + len;
