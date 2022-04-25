@@ -2167,14 +2167,17 @@ static int64 Shotgun(Genome *gene, int ploid, double prate) {
     sseq = Malloc(smax + 3, "Allocating mutated read buffer");
 
     tooshort = RMEAN / COVERAGE;
-    if (tooshort < RSHORT)
+    if (tooshort < RSHORT) {
         tooshort = RSHORT;
+    }
+    printf("tooshort = %lld\n", tooshort);
 
     if (ERRINFO) {
         emark = ftello(ERR_OUT);
         fprintf(ERR_OUT, "h 1000000000 %g\n", prate);
-    } else
+    } else {
         emark = 0;
+    }
 
     genbp = 0;
     nreads = 0;
@@ -2201,8 +2204,9 @@ static int64 Shotgun(Genome *gene, int ploid, double prate) {
         while (totbp > 0) {
             int64 len, rbeg, rend, del;
 
-            int increment = sample_exponential(((double) RMEAN * (glen - nbeg)) / (double) totbp);
-            printf("increment = %d\n", increment);
+            double mean_increment = ((double) RMEAN * (glen - nbeg)) / (double) totbp;
+            int increment = sample_exponential(mean_increment);
+            printf("mean_increment = %f\nincrement = %d\n", mean_increment, increment);
             nbeg += increment;
 
             do {
@@ -2240,7 +2244,7 @@ static int64 Shotgun(Genome *gene, int ploid, double prate) {
                     if (nbeg < 0)
                         continue;
                     else {
-                        printf("breaking because nbeg => 0 and len < tooshort: %lld < 0 and %lld < %lld\n", nbeg, len, tooshort);
+                        printf("breaking because nbeg => 0 and len < tooshort: %lld >= 0 and %lld < %lld\n", nbeg, len, tooshort);
                         break;
                     }
                 }
