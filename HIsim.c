@@ -2201,10 +2201,12 @@ static int64 Shotgun(Genome *gene, int ploid, double prate)
       else
         nbeg  = -RMEAN;
       totbp = COVERAGE*(glen-nbeg);
+      printf("initial totbp = %lld\n", totbp);
       rtag = 0;
       while (totbp > 0)
         { int64 len, rbeg, rend, del;
 
+          printf("totbp = %lld\n", totbp);
           nbeg += sample_exponential((RMEAN*(glen-nbeg))/totbp);
 
           do
@@ -2241,6 +2243,7 @@ static int64 Shotgun(Genome *gene, int ploid, double prate)
                 }
             }
 
+          printf("len = %lld", len);
           totbp -= len;
 
           if (len > omax)
@@ -2397,6 +2400,7 @@ static int64 Shotgun(Genome *gene, int ploid, double prate)
           }
 
           nreads += 1;
+          printf("final totbp = %lld\n", totbp);
         }
 
       if (CIRCULAR)
