@@ -2206,7 +2206,6 @@ static int64 Shotgun(Genome *gene, int ploid, double prate)
       while (totbp > 0)
         { int64 len, rbeg, rend, del;
 
-          printf("totbp = %lld\n", totbp);
           nbeg += sample_exponential((RMEAN*(glen-nbeg))/totbp);
 
           do
@@ -2219,18 +2218,24 @@ static int64 Shotgun(Genome *gene, int ploid, double prate)
             { if (rend > glen)
                 { rend = rend % glen;
                   rtag += 1;
-                  if (rtag >= COVERAGE)
+                  if (rtag >= COVERAGE) {
+                    printf("breaking because rtag >= COVERAGE: %lld >= %f\n", rtag, COVERAGE);
                     break;
+                  }
                 }
-              if (glen-rbeg < tooshort)
+              if (glen-rbeg < tooshort) {
+                printf("breaking because glen-rbeg < tooshort: %lld-%lld < %lld\n", glen, rbeg, tooshort);
                 break;
+              }
             }
           else
             { if (rend > glen)
                 { rend = glen;
                   rtag += 1;
-                  if (rtag >= COVERAGE)
+                  if (rtag >= COVERAGE) {
+                    printf("breaking because rtag >= COVERAGE: %lld >= %f\n", rtag, COVERAGE);
                     break;
+                  }
                 }
               if (rbeg < 0)
                 rbeg = 0;
@@ -2238,12 +2243,13 @@ static int64 Shotgun(Genome *gene, int ploid, double prate)
               if (len < tooshort)
                 { if (nbeg < 0)
                     continue;
-                  else
+                  else {
+                    printf("breaking because nbeg < 0: %lld < 0\n", nbeg);
                     break;
+                  }
                 }
             }
 
-          printf("len = %lld", len);
           totbp -= len;
 
           if (len > omax)
@@ -2400,13 +2406,14 @@ static int64 Shotgun(Genome *gene, int ploid, double prate)
           }
 
           nreads += 1;
-          printf("final totbp = %lld\n", totbp);
         }
 
       if (CIRCULAR)
         genbp += COVERAGE*glen - totbp;
       else
         genbp += COVERAGE*(glen+RMEAN) - totbp;
+
+      printf("final totbp = %lld\n", totbp);
     }
 
   printf("glensum = %lld\n", glensum);
