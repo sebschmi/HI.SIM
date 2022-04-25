@@ -2206,6 +2206,7 @@ static int64 Shotgun(Genome *gene, int ploid, double prate) {
 
             double mean_increment = ((double) RMEAN * (glen - nbeg)) / (double) totbp;
             int increment = sample_exponential(mean_increment);
+            printf("RMEAN = %d; glen = %lld; nbeg = %lld; totbp = %lld\n", RMEAN, glen, nbeg, totbp);
             printf("mean_increment = %f\nincrement = %d\n", mean_increment, increment);
             nbeg += increment;
 
@@ -2244,7 +2245,7 @@ static int64 Shotgun(Genome *gene, int ploid, double prate) {
                     if (nbeg < 0)
                         continue;
                     else {
-                        printf("breaking because nbeg => 0 and len < tooshort: %lld >= 0 and %lld < %lld\n", nbeg, len, tooshort);
+                        printf("breaking because nbeg => 0 and len < tooshort: %lld >= 0 and %lld < %lld (glen = %lld)\n", nbeg, len, tooshort, glen);
                         break;
                     }
                 }
