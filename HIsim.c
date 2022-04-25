@@ -2170,7 +2170,7 @@ static int64 Shotgun(Genome *gene, int ploid, double prate) {
     if (tooshort < RSHORT) {
         tooshort = RSHORT;
     }
-    printf("tooshort = %lld\n", tooshort);
+    printf("tooshort = %lld\nRSHORT = %d\n", tooshort, RSHORT);
 
     if (ERRINFO) {
         emark = ftello(ERR_OUT);
@@ -2216,6 +2216,7 @@ static int64 Shotgun(Genome *gene, int ploid, double prate) {
 
             rbeg = nbeg;
             rend = nbeg + len;
+            printf("initial rbeg = %lld; rend = %lld; len = %lld; glen = %lld\n", rbeg, rend, len, glen);
             if (CIRCULAR) {
                 if (rend > glen) {
                     rend = rend % glen;
@@ -2231,6 +2232,7 @@ static int64 Shotgun(Genome *gene, int ploid, double prate) {
                 }
             } else {
                 if (rend > glen) {
+                    printf("adjusting overflowing rend %lld -> %lld\n", rend, glen);
                     rend = glen;
                     rtag += 1;
                     if (rtag >= COVERAGE) {
@@ -2238,8 +2240,10 @@ static int64 Shotgun(Genome *gene, int ploid, double prate) {
                         break;
                     }
                 }
-                if (rbeg < 0)
+                if (rbeg < 0) {
+                    printf("adjusting negative rbeg %lld -> 0\n", rbeg);
                     rbeg = 0;
+                }
                 len = rend - rbeg;
                 if (len < tooshort) {
                     if (nbeg < 0)
