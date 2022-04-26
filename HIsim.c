@@ -2187,9 +2187,8 @@ static int64 Shotgun(Genome *gene, int ploid, double prate)
       glen = gene->sflen[i];
 
       if (glen <= RMEAN+RSDEV)
-        { fprintf(stderr,"%s: Scaffold length is less than mean read length + 1 std. deviation!\n",
+        { fprintf(stderr,"%s: Scaffold length is less than mean read length + 1 std. deviation, skipping!\n",
                          Prog_Name);
-          exit (1);
         }
 
       if (CIRCULAR)
