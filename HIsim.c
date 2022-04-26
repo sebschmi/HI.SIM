@@ -2601,6 +2601,19 @@ int main(int argc, char *argv[])
           Output_Haplotype(haps[p],f);
 
           fclose(f);
+
+          // also print haplotype as fasta
+          f = fopen(Catenate(OUT,Numbered_Suffix(".hap",p+1,".fasta"),"",""),"w");
+          if (f == NULL)
+          { fprintf(stderr,"%s: Cannot create %s.hap%d.fasta for writing\n",Prog_Name,OUT,p+1);
+            exit (1);
+          }
+
+          Genome *haplotype_genome = Haplotype_Sequence(haps[p]);
+          Print_Genome(haplotype_genome, f);
+          Free_Genome(haplotype_genome);
+
+          fclose(f);
         }
     }
 
