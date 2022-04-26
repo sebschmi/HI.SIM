@@ -88,7 +88,7 @@ static uint64 GENER;      // Generator state
 
 #define FLIP_RATE    .5  //  Forward/reverse sampling ratio
 
-static char dna[4] = { 'a', 'c', 'g', 't' };
+static char dna[4] = { 'A', 'C', 'G', 'T' };
 
 
 /*******************************************************************************************
